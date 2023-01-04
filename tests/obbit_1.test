@@ -3,7 +3,7 @@
 #--------------------------------------------------------------------
 # strict: -d, -opt, -all options, -all=yes
 
-#% lassign [apave::parseOptionsFile 1 {-d mydir -all myfile with spaces} \
+#% lassign [::apave::parseOptionsFile 1 {-d mydir -all myfile with spaces} \
 #%     -d /home/me -opt some -all =NONE=] optvals1 filename1
 #% array set opts $optvals1
 #% set a "$opts(-d) $opts(-opt) $opts(-all) FILE1=$filename1"
