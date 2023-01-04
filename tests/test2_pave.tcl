@@ -1585,10 +1585,6 @@ where:
 
 # __________________________ Running the test ___________________________ #
 
-#!#! Use "::PR start ?command ...?" to start profiling.
-#!#! Use "::PR end" to end profiling and output results.
-#!source /home/apl/PG/github/alited/lib/util/profiler.tcl
-#!::PR start pack puts label button ttk::notebook ttk::label ttk::button t::fillBarTabs t::test2_pave
 puts "\nThis is just a demo. Take it easy."
 set test2script $::t::ftx1
 set ::t::opct alt
@@ -1622,6 +1618,5 @@ if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is
   exec [info nameofexecutable] $test2script $::t::opct [::t::csCurrent] $::t::fontsz $::t::ans4 "$::t::opcIcon" $::t::hue &
 }
 ::apave::endWM
-#!::PR end
 exit
 #ARGS: alt 24 9 12 "small icons"
