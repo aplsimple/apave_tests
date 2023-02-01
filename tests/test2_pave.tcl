@@ -26,9 +26,10 @@ if {[info exists ::env(TCLLIBPATH)]} {lappend ::auto_path {*}$::env(TCLLIBPATH)}
 
 set ::testdirname [file normalize [file dirname [info script]]]
 set ::pavedirname [file normalize [file join $::testdirname .. .. apave]]
+set ::aletdirname [file normalize [file join $::testdirname .. .. ale_themes]]
 cd $::testdirname
 set ::test2dirs [list $::pavedirname $::testdirname/.. $::testdirname $::testdirname/../baltip $::testdirname/../bartabs $::testdirname/../hl_tcl $::testdirname/../../screenshooter $::testdirname/../../aloupe $::testdirname/../.bak/fsdialog $::testdirname/../.bak/tablelist]
-lappend ::auto_path {*}$::test2dirs
+set ::auto_path [linsert $::auto_path 0 {*}$::test2dirs $::aletdirname]
 catch {package require aloupe}
 set apavever [package require apave]
 set pkg_versions0 "\n  <red>apave $apavever</red>\n\n"
@@ -139,7 +140,7 @@ namespace eval t {
         \u2022 <linkAG>Andy Goth</linkAG>\n \
         \u2022 <linkDA>Danilo Chang</linkDA>\n \
         "
-    set tab2 [list Information Acknowledgements "{fra - - 1 99 {-st nsew -rw 1 -cw 1}} {.TexAckn - - - - {pack -side left -expand 1 -fill both} {-w $wmax -h 31 -rotext ::t::AcknText -tags ::t::textTags}} {.sbv .texAckn L - - {pack -side right}}"]
+    set tab2 [list Information Acknowledgements "{fra - - 1 99 {-st nsew -rw 1 -cw 1}} {.TexAckn - - - - {pack -side left -expand 1 -fill both} {-w $wmax -h 34 -rotext ::t::AcknText -tags ::t::textTags}} {.sbv .texAckn L - - {pack -side right}}"]
 
     ::t::msg info "  It's a demo of
     $::pkg_versions0\n\n  Details: \
@@ -152,6 +153,8 @@ namespace eval t {
 
   License: <linkMIT>MIT</linkMIT>
   _____________________________________
+
+  <red>tablelist [package require tablelist]</red>
 
   <red> $::tcltk_version </red> <link3></link3>
 
@@ -709,8 +712,7 @@ namespace eval t {
   }
 
   proc colorBar {} {
-    lassign [::hl_tcl::addingColors] -> fgmark
-    ::bt configure -fgmark $fgmark
+    ::bt configure -fgmark [lindex [::t::pave csGet] 17]
   }
 
   proc getTabFile {TID} {
@@ -1051,7 +1053,7 @@ namespace eval t {
       {fon1 labBfon1 L 1 9 {} {-tvar t::fon1 -title {Pick a font}}}
       {Dat1 labBdat1 L 1 9 {} {-tvar t::dat1 -title {Pick a date} -dateformat %Y.%m.%d}}
       {clr1 labBclr1 L 1 9 {} {-tvar t::clr1 -title {Pick a color}}}
-      {Ftx1 labBftx1 L 1 9 {} {-h 7 -ro 0 -tvar ::t::ftx1 -title {Pick a file to view} -filetypes {{{Tcl scripts} .tcl} {{Text files} {.txt .test}}} -wrap word -tip "After choosing a file\nthe text will be read-only." -tabnext "[t::pave Opc1]"}}
+      {Ftx1 labBftx1 L 1 9 {} {-h 7 -ro 0 -tvar ::t::ftx1 -title {Pick a file to view} -filetypes {{{Tcl scripts} .tcl} {{Text files} {.txt .test}}} -wrap word -tip "After choosing a file\nthe text will be read-only." -tabnext "[::t::pave Opc1]"}}
       {labOpc labBftx1 T 2 1 {-st ens} {-t "tk_optionCascade:"}}
       {frAopc labOpc L 1 9 {-st w -pady 9}}
       ###############____opc1____good_way
@@ -1100,7 +1102,7 @@ namespace eval t {
             IMG_7 {{::t::aloupe} -tip "Run aloupe@@ -under 5"}
             sev 7
             h_ 1
-            opcTheme {::t::opct ::t::opcThemes {-width 7} {} -command ::t::opcToolPost -tip {Current ttk theme\n\nNOTE: awthemes are active only\nif a color scheme isn't "-2 None".@@ -under 3}}
+            opcTheme {::t::opct ::t::opcThemes {-width 9} {} -command ::t::opcToolPost -tip {Current ttk theme\n\nNOTE: awthemes are active only\nif a color scheme isn't "-2 None".@@ -under 3}}
             {# h_ 1}
             {IMG_3 {{::t::toolBut 3 \[set ::t::prevcs\]}}}
             h_ 1
@@ -1300,14 +1302,14 @@ where:
       # {#               TABS OF VIEW (JUST TO BE PRESENT)               }
       ####################################################################
       {labB  -   - 1 1 {-st w} {-t "Defaults"}}
-      {chb1 + T 1 2 {-st w} {-t "Match whole word only" -var t::c1}}
-      {chb2 + T 1 2 {-st w} {-t "Match case"  -var t::c2}}
-      {chb3 + T 1 2 {-st w} {-t "Wrap around" -var t::c3}}
-      {sev1 chb1 L 3 1 }
+      {swi1 + T 1 2 {-st w} {-t "Match whole word only" -var t::c1}}
+      {swi2 + T 1 2 {-st w} {-t "Match case"  -var t::c2}}
+      {swi3 + T 1 2 {-st w} {-t "Wrap around" -var t::c3}}
+      {sev1 swi1 L 3 1 }
       {labB3 + L 1 1 {-st w} {-t "Direction:"}}
       {rad1 + T 1 1 {-st w} {-t "Down" -var t::v -value 1}}
       {rad2 + L 1 1 {-st w} {-t "Up"   -var t::v -value 2}}
-      {v_ chb3 T 1 5}
+      {v_ swi3 T 1 5}
       {fraflb v_ T 1 5 {-st ew -pady 10} {}}
       {.btt1 - - - - {pack -side right -anchor nw -padx 9} {-t "Edit" -com t::viewfile -image ICN31 -tip "Does the same as the button nearby,\njust to demo a user widget type.\n\nTo have the widget type themed,\nit should be customized beforehand."}}
       {.butEdit - - - - {pack -side right -anchor nw -padx 9} {-t "Edit the file" -com t::viewfile -tip "Opens a stand-alone editor of the file\nthe listbox' data are taken from." -image ICN31-small -compound left}}
@@ -1597,12 +1599,31 @@ if {$::argc>=5} {
 }
 set ::t::btsbd 0
 set ::t::opcThemes [list default clam classic alt]
+set ldthemes {}
 if {$::t::newCS!=-2 && ![catch {
 package require awthemes
 package require ttk::theme::awlight
 package require ttk::theme::awdark
-}]} then {
-  set ::t::opcThemes [list default clam classic alt -- {{light / dark} awlight awdark}]
+} e]} then {
+  append ldthemes { awlight awdark}
+}
+if {[file exists $::aletdirname]} {
+  if {$ldthemes ne {}} {
+    append ldthemes { --}
+  }
+  foreach alet {forest-light forest-dark -- lightbrown darkbrown -- plastik} {
+    if {$alet eq {--}} {
+      append ldthemes { --}
+    } else {
+      lassign [split $alet -] aletdir
+      if {![catch {source [file join $::aletdirname $aletdir $alet.tcl]}]} {
+        append ldthemes " $alet"
+      }
+    }
+  }
+}
+if {$ldthemes ne {}} {
+  lappend ::t::opcThemes -- "{light / dark} $ldthemes"
 }
 if {[catch {::apave::initWM -theme $::t::opct -cs $::t::newCS}]} ::apave::initWM
 if {![info exists ::t::hue] || ![string is integer -strict $::t::hue]} {set ::t::hue 0}
