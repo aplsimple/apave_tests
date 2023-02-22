@@ -159,7 +159,7 @@ namespace eval t {
   <red> $::tcltk_version </red> <link3></link3>
 
   <red> $::tcl_platform(os) $::tcl_platform(osVersion) </red>\n
-" -modal no -t 1 -w $wmax -scroll 0 -tags ::t::textTags -tab2 $tab2 -my "after idle {::t::textImaged %w}"
+" -modal no -t 1 -w $wmax -scroll 0 -tags ::t::textTags -tab2 $tab2 -my "after idle {::t::textImaged %w}" -comOK destroy
   }
 
   # imitating apply function
@@ -469,7 +469,7 @@ namespace eval t {
   }
 
   proc msg {icon message args} {
-    ::t::pdlg ok $icon [string toupper $icon] "\n$message\n" {*}$args
+    ::t::pdlg ok $icon [string toupper $icon] "\n$message\n" {*}$args -onclose destroy
   }
 
   proc restartit {} {
@@ -1429,8 +1429,8 @@ where:
     variable pave
     ::apave::obj progress_Begin {} .win Starting {Wait a little...} {} 1130 -length 250
     set firstin [expr {$::t::newCS==[apave::cs_Non]}]
-    apave::APaveInput create pdlg .win
-    set ::t::paveobj [apave::APaveInput create pave .win $::t::newCS]
+    apave::APave create pdlg .win
+    set ::t::paveobj [apave::APave create pave .win $::t::newCS]
     pave initLinkFont -slant italic -underline 1
     pave untouchWidgets *buTClr*
     if {!$firstin} {pave basicFontSize $::t::fontsz}

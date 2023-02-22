@@ -188,6 +188,9 @@ multiline entry field aka
     return $res
   }
 
+
+  # ________________________ EONS _________________________ #
+
 }
 
 ###########################################################################
@@ -196,8 +199,8 @@ multiline entry field aka
 apave::initWM
 
 # firstly show dialogs without checkboxes
-apave::APaveInput create dlg
-apave::APaveInput create dlg2
+apave::APave create dlg
+apave::APave create dlg2
 catch {::transpops::run [file join $::testdirname ../.bak/transpops_dialog.txt] {<Control-t> <Alt-t>} .dia}
 set ::csN ""
 set dn "Don't show this again"
@@ -243,5 +246,5 @@ while 1 {
   }
 }
 
-apave::APaveInput  destroy
+apave::APave  destroy
 exit

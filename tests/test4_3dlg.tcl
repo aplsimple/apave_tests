@@ -96,7 +96,7 @@ destroy $win
 #======================================================
 
   set login "mylogin"
-  apave::APaveInput create dlg
+  apave::APave create dlg
     set res [dlg input ques "My site" [list \
       entLogin {{Login......}} "{$::login}" \
       entPassw {{Password...} {} {-show *}} {} \
