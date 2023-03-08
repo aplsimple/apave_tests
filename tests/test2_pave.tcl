@@ -1587,6 +1587,9 @@ where:
 
 # __________________________ Running the test ___________________________ #
 
+
+## ________________________ Options _________________________ ##
+
 puts "\nThis is just a demo. Take it easy."
 set test2script $::t::ftx1
 set ::t::opct alt
@@ -1598,6 +1601,9 @@ if {$::argc>=5} {
   set ::t::opcIcon "small"
 }
 set ::t::btsbd 0
+
+## ________________________ Themes _________________________ ##
+
 set ::t::opcThemes [list default clam classic alt]
 set ldthemes {}
 if {$::t::newCS!=-2 && ![catch {
@@ -1625,6 +1631,9 @@ if {[file exists $::aletdirname]} {
 if {$ldthemes ne {}} {
   lappend ::t::opcThemes -- "{light / dark} $ldthemes"
 }
+
+## ________________________ Inits _________________________ ##
+
 if {[catch {::apave::initWM -theme $::t::opct -cs $::t::newCS}]} ::apave::initWM
 if {![info exists ::t::hue] || ![string is integer -strict $::t::hue]} {set ::t::hue 0}
 # check for CloudTk by Jeff Smith (on wiki.tcl-lang.org)
@@ -1633,11 +1642,39 @@ if {$::noRestart} {set ::t::ans4 12}
 set ::t::opcIcon [lindex $::t::opcIcon 0]
 ::apave::iconImage -init $::t::opcIcon
 append ::t::opcIcon " icons  "
+
+## ________________________ Test record/playback _________________________ ##
+
+if 0 {
+  set playtkl_dir ~/PG/github/playtkl_TESTS/
+  if {[file exists $playtkl_dir]} {
+    set playtkl_log $playtkl_dir/test2_pave-2.log
+    source [file join [file join $::testdirname .. .. playtkl] playtkl.tcl]
+    if 0 {
+      # 1. recording
+      after 4000 "playtkl::record $playtkl_log F12"
+    } else {
+      # 2. playing
+      after 4000 "playtkl::play $playtkl_log F12"
+    }
+  }
+}
+
+## ________________________ Run it _________________________ ##
+
 set test2res [t::test2_pave]
 puts "\nResult of test2 = $test2res\n[string repeat - 77]"
+
+if {[info commands playtkl::end] ne {}} playtkl::end  ;# for playtkl recording
+
+## ________________________ Restart? _________________________ ##
+
 if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is set
   exec [info nameofexecutable] $test2script $::t::opct [::t::csCurrent] $::t::fontsz $::t::ans4 "$::t::opcIcon" $::t::hue &
 }
 ::apave::endWM
 exit
-#ARGS: alt 24 9 12 "small icons"
+
+# ________________________ EOF _________________________ #
+#EXEC: ~/PG/alited/bin/tcltk-8.6.10 ~/PG/github/apave_tests/tests/test2_pave.tcl lightbrown 4 10 12 "small icons"
+#-ARGS: alt 24 9 12 "small icons"

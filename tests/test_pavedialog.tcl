@@ -198,6 +198,24 @@ multiline entry field aka
 
 apave::initWM
 
+## ________________________ Test record/playback _________________________ ##
+
+if 0 {
+  set playtkl_dir ~/PG/github/playtkl_TESTS/
+  if {[file exists $playtkl_dir]} {
+    set playtkl_log $playtkl_dir/test_pavedialog-2.log
+    source [file join [file join $::testdirname .. .. playtkl] playtkl.tcl]
+#!    playtkl::inform YES
+    if 0 {
+      # 1. recording
+      after 50 "playtkl::record $playtkl_log F12"
+    } else {
+      # 2. playing
+      after 50 "playtkl::play $playtkl_log F12"
+    }
+  }
+}
+
 # firstly show dialogs without checkboxes
 apave::APave create dlg
 apave::APave create dlg2
@@ -246,5 +264,6 @@ while 1 {
   }
 }
 
-apave::APave  destroy
+apave::APave destroy
+if {[info commands playtkl::end] ne {}} playtkl::end
 exit
