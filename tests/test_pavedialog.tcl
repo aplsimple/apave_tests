@@ -165,7 +165,7 @@ multiline entry field aka
         INFO: @@-pos 22 -list {{test2_fco.dat} {other item} trunk DOC} test2_fco.dat@@} \
       seh4 {{} {-pady 9}} {} \
       tex1 {{Text field................} {} {-h 4 -w 55 -tabnext butOK}} $::t8tex1 \
-    ] -size 14 -weight bold -head "Entries, choosers, switchers, boxes..." {*}$args]
+    ] -size 14 -weight bold -buttons {butChange {Edit it} 3 butUndo {Undo it} 4 butRedo {Redo it} 5} -head "Entries, choosers, switchers, boxes..." {*}$args]
     if {[lindex $res 0]} {
       lassign [dlg2 valueInput] ::t8ent1 ::t8fil1 ::t8fis1 ::t8dir1 ::t8fon1 ::t8clr1 ::t8dat1 ::t8chb1 ::t8rad1 ::t8spx1 ::t8lbx1 ::t8cbx1 ::t8opc1 ::t8fco1 ::t8tex1
     }
