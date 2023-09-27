@@ -1196,7 +1196,7 @@ namespace eval t {
       ####################################################################
       # {#                   DISABLED NON_TTK WIDGETS                    }
       ####################################################################
-      {labFR # # # # # {-t "labeled frame" -font "-weight bold -size 11" -state disabled -foreground gray}}
+      {LabFR # # # # # {-t "labeled frame" -font "-weight bold -size 11" -state disabled -foreground gray}}
       {lfR1 fra1 L 1 1 {-st we -cw 1} {-t "Disabled counterparts"}}
       {.laB - - 1 1 {-st w -pady 5} {-t "label" -font "-weight bold -size 11" -state disabled}}
       {.BuTRun .laB T 1 1 {-st w} {-t "button" -state disabled}}
@@ -1216,7 +1216,7 @@ namespace eval t {
       {.frALB.laB - - - - {pack -side left -anchor nw} {-t "listbox of colors  " -state disabled}}
       {.frALB.lbx - - - - {pack -side left -fill x -expand 1} {-lvar t::lvar -h 4 -w 30 -state disabled}}
       {.frALB.sbV + L - - {pack -side left}}
-      {.lfR .frALB T 1 1 {-st w} {-labelwidget .win.fra.fra.nbk.f3.labFR -font "-weight bold -size 11" -state disabled}}
+      {.lfR .frALB T 1 1 {-st w} {-labelwidget LabFR -font "-weight bold -size 11" -state disabled}}
       {.lfR.raD1 - - 1 1 {-st w -pady 5} {-t "read-only text" -var t::v2 -value 1 -state disabled}}
       {.lfR.raD2 .lfR.raD1 L 1 1 {-st w -padx 7} {-t "editable text" -var t::v2 -value 2 -state disabled}}
 
@@ -1624,6 +1624,7 @@ if {[file exists $::aletdirname]} {
       lassign [split $alet -] aletdir
       if {![catch {source [file join $::aletdirname $aletdir $alet.tcl]}]} {
         append ldthemes " $alet"
+        if {$::t::newCS==-2} {::apave::obj csSet -1}
       }
     }
   }
@@ -1648,7 +1649,7 @@ append ::t::opcIcon " icons  "
 if 0 {
   set playtkl_dir ~/PG/github/playtkl_TESTS/
   if {[file exists $playtkl_dir]} {
-    set playtkl_log $playtkl_dir/test2_pave-2.log
+    set playtkl_log $playtkl_dir/test2_pave-2.alm
     source [file join [file join $::testdirname .. .. playtkl] playtkl.tcl]
     if 0 {
       # 1. recording
@@ -1676,5 +1677,5 @@ if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is
 exit
 
 # ________________________ EOF _________________________ #
-#EXEC: ~/PG/alited/bin/tcltk-8.6.10 ~/PG/github/apave_tests/tests/test2_pave.tcl lightbrown 4 10 12 "small icons"
-#-ARGS: alt 24 9 12 "small icons"
+#-EXEC: ~/PG/alited/bin/tcltk-8.6.10 ~/PG/github/apave_tests/tests/test2_pave.tcl clam 41 10 12 "small icons"
+#ARGS: alt 24 9 12 "middle icons"
