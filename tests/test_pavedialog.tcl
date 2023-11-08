@@ -200,7 +200,7 @@ apave::initWM
 
 ## ________________________ Test record/playback _________________________ ##
 
-if 1 {
+if 0 {
   set playtkl_dir ~/PG/github/playtkl_TESTS/
   if {[file exists $playtkl_dir]} {
     set playtkl_log $playtkl_dir/test_pavedialog-2.alm
