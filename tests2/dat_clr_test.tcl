@@ -15,9 +15,9 @@
 # - choosers of buttons are open next to the mouse pointer, with "-geometry pointer+10+10"
 # - "-onclose destroy" to destroy windows instead of "destroy $w", both examples below
 # - "-centerme . -geometry 300x300" sets a window's sizes and centers it over "."
-# - -moveall and -tonemoves options of 2 color choosers are saved/restored at calls,
+# - -moveall option of 2 color choosers is saved/restored at calls,
 #      both are only for Unix (tkcc package be used)
-# - -validate & -validatecommand options are for updating moveall & tonemoves
+# - -validate & -validatecommand options are for updating moveall
 # - paved windows are shown with showModal default "-escape 1", to close them with Esc key
 # - "-resizable no" makes the main window unresizable, others being not
 # - Spanish locale forced for both choosers (works with Tcl/Tk deployed, not with tclkits)
@@ -43,7 +43,8 @@ msgcat::mclocale es
 set datefmt %Y-%m-%d
 set selectedDate [set selectedDate2 [clock format [clock seconds] -format $datefmt]]
 
-set moveall [set tonemoves 1]
+set moveall 1
+set butfg [set butbg {}]
 set selectedColor #000
 
 # ________________________ procs _________________________ #
@@ -64,17 +65,20 @@ proc launchCal {parent} {
 #_______________________
 
 proc ClrOptions {} {
-  catch {::tk::dialog::color::GetOptions ::moveall ::tonemoves}
+  lassign [::tk::dialog::color::GetOptions] ::moveall ::butfg ::butbg
+  if {$::butbg ne {}} {
+    [pave BuTCol] config -fg $::butfg -bg $::butbg
+  }
   return 1
 }
 #_______________________
 
 proc launchColor {parent} {
   set res [pave chooser colorChooser ::selectedColor -parent $parent \
-    -moveall $::moveall -tonemoves $::tonemoves -geometry pointer+10+10]
-  ClrOptions
+    -moveall $::moveall -geometry pointer+10+10]
   if {$res ne {}} {
-    puts "Selected color: $::selectedColor, moveall: $::moveall, tonemoves: $::tonemoves"
+    ClrOptions
+    puts "Selected color: $::selectedColor, moveall: $::moveall"
     pave validateColorChoice Clr1
   }
 }
@@ -106,12 +110,12 @@ pave2 paveWindow .t2 {{but - - - - {} {-t "clicky 1" -com {puts "clicky 1!"}}}}
 pave showModal .t2 -centerme . -geometry 300x300 -modal 0 -waitvar 0 -onclose destroy
 pave makeWindow .t "date / color choosers"
 pave paveWindow .t {
-  {butCal - - 1 1 {} {-t "calendar..." -com {::launchCal .t}}}
-  {butCol + T 1 1 {} {-t "color..." -com {::launchColor .t}}}
-  {butTop + T 1 1 {} {-t "toplevel..." -com {::launchTop .t}}}
-  {dat butCal L 1 1 {-st w} {-justify center -w 11 -tvar ::selectedDate -dateformat $::datefmt}}
+  {buTCal - - 1 1 {} {-t "calendar..." -w 10 -com {::launchCal .t}}}
+  {BuTCol + T 1 1 {} {-t "color..." -w 10 -com {::launchColor .t}}}
+  {buTTop + T 1 1 {} {-t "toplevel..." -w 10 -com {::launchTop .t}}}
+  {dat buTCal L 1 1 {-st w} {-justify center -w 11 -tvar ::selectedDate -dateformat $::datefmt}}
   {Clr1 + T 1 1 {-st w} {-justify center -w 11 -tvar ::selectedColor -validate all -validatecommand ::ClrOptions}}
-  {seh butTop T 1 2}
+  {seh buTTop T 1 2}
   {daT + T 1 2 {} {-tvar ::selectedDate2 -dateformat $::datefmt -width 3 -com {puts  "Selected date #2: \$::selectedDate2 (D.M.Y: %d.%m.%y)"} -popup {puts "D.M.Y: %d.%m.%y on right click, pos: %X,%Y"}}}
 }
 pave showModal .t -centerme .t2 -resizable no

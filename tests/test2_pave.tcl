@@ -53,7 +53,7 @@ namespace eval t {
   # variables used in layouts
   variable v 1 v2 1 c1 0 c2 0 c3 0 en1 "" en2 "" tv 1 tv2 "enter value" sc 0 sc2 0 cb3 "Content of test2_fco.dat" lv1 {}
   variable fil1 "" fis1 "" dir1 "" clr1 "" fon1 "" dat1 ""
-  variable ans0 0 ans1 0 ans2 0 ans3 0 ans4 0 fontsz 10
+  variable ans0 0 ans1 0 ans2 0 ans3 0 ans4 0 fontsz 10 geom {}
   variable lvar {white blue "dark red" black #112334 #fefefe
   "sea green" "hot pink" cyan aqua "olive drab" snow wheat  }
   variable arrayTab
@@ -1495,7 +1495,6 @@ where:
       .win.fra.fra.nbk2.f1 [pave_Nbk2_Tab1] \
       .win.fra.fra.nbk2.f2 [pave_Nbk2_Tab2] \
       .win.fra.fra.nbk2.f3 [pave_Nbk2_Tab3]
-
     # text widget's name is uppercased, so we can use the Text method
     set wtex [pave Text]
     # bindings and contents for text widget
@@ -1566,7 +1565,7 @@ where:
     ::apave::obj progress_End
     set ::t::curTab ""
     chanTab nbk
-    set res [pave showModal .win -decor 1 -onclose t::exitProc -focus [pave Text]]
+    set res [pave showModal .win -decor 1 -onclose t::exitProc -focus [pave Text] -geometry $t::geom]
     if {$::t::newCS==[apave::cs_Non]} { ;# at restart, newCS is set
       # getting result and clearance
       set res [pave res .win]
@@ -1574,6 +1573,7 @@ where:
       ::t::putsResult2
       ::t::putsResult3
     }
+    puts "Test's geometry: [wm geometry .win]"
     destroy .win
 #    pave destroy
 #    pdlg destroy
@@ -1594,7 +1594,7 @@ puts "\nThis is just a demo. Take it easy."
 set test2script $::t::ftx1
 set ::t::opct alt
 if {$::argc>=5} {
-  lassign $::argv ::t::opct ::t::newCS ::t::fontsz ::t::ans4 ::t::opcIcon ::t::hue
+  lassign $::argv t::opct t::newCS t::fontsz t::ans4 t::opcIcon t::hue t::geom
   set ::t::transpopsFile "transpops2.txt"
 } else {
   set ::t::newCS 2 ;# Forest CS
@@ -1671,7 +1671,7 @@ if {[info commands playtkl::end] ne {}} playtkl::end  ;# for playtkl recording
 ## ________________________ Restart? _________________________ ##
 
 if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is set
-  exec [info nameofexecutable] $test2script $::t::opct [::t::csCurrent] $::t::fontsz $::t::ans4 "$::t::opcIcon" $::t::hue &
+  exec [info nameofexecutable] $test2script $t::opct [::t::csCurrent] $t::fontsz $t::ans4 "$::t::opcIcon" $t::hue &
 }
 ::apave::endWM
 exit

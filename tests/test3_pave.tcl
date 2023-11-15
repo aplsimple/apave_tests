@@ -81,7 +81,7 @@ pave paveWindow .win {
   {butC butB T 1 1 "-st nsew" {-t C}}
   {butD butC L 1 3 "-st nsew -csz 20" {-t D}}
   {butE butA T 1 1 "-st nsew" {-t E -w 5}}
-  {butF butE L 1 2 "-st nsew -rsz 6.cm" {-t F}}
+  {butF butE L 1 2 "-st nsew -rsz 6" {-t F}}
   {butG butF L 1 1 "-st nsew" {-t G}}
   {butH butG L 1 1 "-st nsew" {-t H}}
   {butI butE T 1 3 "-st nsew" {-t I}}
@@ -98,7 +98,7 @@ pave paveWindow .win2 {
   {butC butB T 1 1 "-st nsew" {-t C}}
   {butD butC L 1 3 "-st nsew -csz 20" {-t D}}
   {butE butA T 1 1 "-st nsew" {-t E -w 5}}
-  {butF butE L 1 3 "-st nsew -rsz 6.cm" {-t F}}
+  {butF butE L 1 3 "-st nsew -rsz 6" {-t F}}
   {butG butF L 1 1 "-st nsew" {-t G}}
   {butH butG L 1 1 "-st nsew" {-t H}}
   {butI butE T 1 4 "-st nsew" {-t I}}
@@ -110,14 +110,14 @@ wm geometry .win2 +464+300
 pave makeWindow .win3 "Test2 - \"A\" widget enlarged"
 pave paveWindow .win3 {
   {butA -   - 2 2 "-st nsew -csz 20" {-t A}}
-  {butB butA L 1 4 "-st nsew" {-t B}}
-  {butC butB T 1 1 "-st nsew" {-t "CCCP-ick me to close" -com exit}}
-  {butD butC L 1 3 "-st nsew -csz 20" {-t D}}
-  {butE butA T 1 1 "-st nsew" {-t E}}
-  {butF butE L 1 3 "-st nsew -rsz 6.cm" {-t F}}
-  {butG butF L 1 1 "-st nsew" {-t G}}
-  {butH butG L 1 1 "-st nsew" {-t H}}
-  {butI butE T 1 4 "-st nsew" {-t I}}
+  {butB + L 1 4 "-st nsew" {-t B}}
+  {butC + T 1 1 "-st nsew" {-t "CCCP-ick me to close" -com exit}}
+  {butD + L 1 3 "-st nsew -csz 20" {-t D}}
+  {buTE butA T 1 1 "-st nsew" {-t E}}
+  {buTF + L 1 3 "-st nsew -rsz 6" {-t F -pady 20}}
+  {buTG + L 1 1 "-st nsew -cw 1 -rw 1" {-t G}}
+  {buTH + L 1 1 "-st nsew" {-t H}}
+  {butI buTE T 1 4 "-st nsew" {-t I}}
   {butJ butI L 1 1 "-st nsew" {-t J}}
   {butK butJ L 1 1 "-st nsew" {-t K}}
 }
