@@ -33,7 +33,7 @@
 
 # ________________________ packages / vars _________________________ #
 
-set auto_path [linsert $auto_path 0 ~/PG/github/apave]
+set auto_path [linsert $auto_path 0 /home/apl/PG/github/apave]
 package require apave
 puts "apave version : [package require apave]"
 
