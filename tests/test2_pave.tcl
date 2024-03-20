@@ -988,17 +988,17 @@ namespace eval t {
       {#fra2 fral L 8 9 {-st nsew}}
       {fra fral L 8 9 {-st nsew}}
       {fra.Nbk - - - - {pack -side top} {
-        f1 {-text " 1st tab of General " -underline 2 -tip "General widgets:\n- entries\n- choosers\n- text viewer/editor\n- tk_optionCascade\n- tablelist"}
-        f2 {-text " Ttk demos/ttkpane.tcl " -underline 1 -tip "The code taken from\nTk's demos/ctext.tcl.\n\nDistributed with Tcl/Tk."}
-        f3 {-text " Non-themed " -underline 1 -tip "Non-ttk widgets,\nthough themed in apave."}
-        f4 {-text " Misc. widgets " -underline 1 -tip "Miscellaneous ttk widgets."}
-        f5 {-text " Color schemes " -underline 1 -tip "Colored patterns\nof color schemes."}
+        f1 {-t " 1st tab of General " -underline 2 -tip "General widgets:\n- entries\n- choosers\n- text viewer/editor\n- tk_optionCascade\n- tablelist"}
+        f2 {-t " Ttk demos/ttkpane.tcl " -underline 1 -tip "The code taken from\nTk's demos/ctext.tcl.\n\nDistributed with Tcl/Tk."}
+        f3 {-t " Non-themed " -underline 1 -tip "Non-ttk widgets,\nthough themed in apave."}
+        f4 {-t " Misc. widgets " -underline 1 -tip "Miscellaneous ttk widgets."}
+        f5 {-t " Color schemes " -underline 1 -tip "Colored patterns\nof color schemes."}
         -traverse yes -select f2
       }}
       {fra.nbk2 - - - - {pack forget -side top} {
-        f1 {-text "Links etc." -tip "Various widgets:\n- check/radio buttons\n- links from text/image\n- listbox from file\n- two independent calendars"}
-        f2 {-text "Scrolled frame" -tip "Example of scrolled frame\nwith file viewer and comboboxes"}
-        f3 {-text "< Calendar $::t::year >" -tip "All-months-of-year calendar.\n\nIt allows to select a list\nof days in years and months.\n\nAll of days allow left and right\nclicks to call callbacks with\nthe wildcards:\n- %y, %m, %d (date)\n- %X, %Y (pointer coordinates)"}
+        f1 {-t "Links etc." -tip "Various widgets:\n- check/radio buttons\n- links from text/image\n- listbox from file\n- two independent calendars"}
+        f2 {-t "Scrolled frame" -tip "Example of scrolled frame\nwith file viewer and comboboxes"}
+        f3 {-t "< Calendar $::t::year >" -tip "All-months-of-year calendar.\n\nIt allows to select a list\nof days in years and months.\n\nAll of days allow left and right\nclicks to call callbacks with\nthe wildcards:\n- %y, %m, %d (date)\n- %X, %Y (pointer coordinates)"}
         -tr {just to test "-tr*" to call ttk::notebook::enableTraversal}
       }}
     }
@@ -1428,7 +1428,7 @@ where:
 
     variable pdlg
     variable pave
-    ::apave::obj progress_Begin {} .win Starting {Wait a little...} {} 1130 -length 250
+    ::apave::obj progress_Begin {} .win Starting {Wait a little...} {} 1060 -length 250
     set firstin [expr {$::t::newCS==[apave::cs_Non]}]
     apave::APave create pdlg .win
     set ::t::paveobj [apave::APave create pave .win $::t::newCS]
@@ -1651,14 +1651,15 @@ append ::t::opcIcon " icons  "
 if 0 {
   set playtkl_dir [::apave::HomeDir]/PG/github/playtkl_TESTS/
   if {[file exists $playtkl_dir]} {
-    set playtkl_log $playtkl_dir/test2_pave-2.alm
+    set playtkl_log $playtkl_dir/test2_pave-0-wish9.0.alm
     source [file join [file join $::testdirname .. .. playtkl] playtkl.tcl]
     if 0 {
       # 1. recording
-      after 4000 "playtkl::record $playtkl_log F12"
+      set details "apave v$::apavever"
+      after 6000 [list after 0 "update; playtkl::record $playtkl_log F12 yes {$details}"]
     } else {
       # 2. playing
-      after 4000 "playtkl::play $playtkl_log F12"
+      after 6000 [list after 0 "update; playtkl::play $playtkl_log F12"]
     }
   }
 }
@@ -1679,4 +1680,5 @@ if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is
 exit
 
 # ________________________ EOF _________________________ #
-#ARGS: alt 24 9 12 "middle icons"
+
+#ARGS: lightbrown 4 9 12 'large icons'
