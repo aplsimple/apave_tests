@@ -44,6 +44,7 @@ set ::e_menu_dir [file normalize [file join $::pavedirname ../e_menu]]
 catch {source [file join $::e_menu_dir e_menu.tcl]}
 catch {package require screenshooter}
 catch {source [file join $::pavedirname ../transpops/transpops.tcl]}
+namespace import ::apave::*
 
 namespace eval t {
 
@@ -54,7 +55,7 @@ namespace eval t {
   # variables used in layouts
   variable v 1 v2 1 c1 0 c2 0 c3 0 en1 "" en2 "" tv 1 tv2 "enter value" sc 0 sc2 0 cb3 "Content of test2_fco.dat" lv1 {}
   variable fil1 "" fis1 "" dir1 "" clr1 "" fon1 "" dat1 ""
-  variable ans0 0 ans1 0 ans2 0 ans3 0 ans4 0 fontsz 10 geom {}
+  variable ans0 0 ans1 0 ans2 0 ans3 0 ans4 0 fontsz 11 geom {}
   variable lvar {white blue "dark red" black #112334 #fefefe
   "sea green" "hot pink" cyan aqua "olive drab" snow wheat  }
   variable arrayTab
@@ -701,8 +702,6 @@ namespace eval t {
     foreach tab [::bt listTab] ffil $::t::tclfiles {
       ::bt [lindex $tab 0] configure -tip [lindex $ffil 1]
     }
-    bind [pave Text] <Control-Left> "::bt scrollLeft ; break"
-    bind [pave Text] <Control-Right> "::bt scrollRight ; break"
     bind .win <F4> "::t::e_menu; break"
     colorBar
   }
@@ -1158,7 +1157,7 @@ namespace eval t {
       {# 2 use cases: full path & 'apavish' path }
       {.lfrB.GutText .lfrB.stat T - - {pack -side left -expand 0 -fill both} {}}
       {#.lfrB.Text .lfrB.canLines T - - {pack -side left -expand 1 -fill both} {-borderwidth 0 -w 80 -h 10 -wrap word -tabnext .win.fra.fral.butHome -gutter .win.fra.fra.nbk.f2.fra.pan.panR.lfrB.gutText -gutterwidth 5 -guttershift 4}}
-      {.lfrB.Text .lfrB.canLines T - - {pack -side left -expand 1 -fill both} {-borderwidth 0 -w 80 -h 10 -wrap word -tabnext .win.fra.fral.butHome -gutter GutText -gutterwidth 5 -guttershift 4 -textpop {popupFindCommands ::t::findTclFirst ::t::findTclNext}}}
+      {.lfrB.Text .lfrB.canLines T - - {pack -side left -expand 1 -fill both} {-borderwidth 0 -w 80 -h 10 -wrap word -tabnext .win.fra.fral.butHome -gutter GutText -gutterwidth 5 -guttershift 4 -textpop {popupFindCommands ::t::findTclFirst ::t::findTclNext} -onevent {<Control-Left> "bt scrollLeft ; break" <Control-Right> "bt scrollRight ; break" <<Modified>> t::tabModified <Control-f> t::findTclFirst <F3> t::findTclNext}}}
       {.lfrB.sbv .lfrB.text L - - {pack -side top}}
     }
   }
@@ -1228,7 +1227,7 @@ namespace eval t {
       {.LaBNT - - - - {pack -side left -anchor nw} {-t "text & scrollbars \
 \n\nas above, i.e.\nnot  ttk::scrollbar\n\ntext is read-only"}}
       {.TextNT - - - - {pack -side left -expand 1 -fill both} {-h 5 -wrap none -rotext ::t::filetxt -tabnext .win.fra.fral.butHome}}
-      {.sbV + L - - {pack}}
+      {.sbV + L - - {pack -after %w}}
       {.sbH .textNT T - - {pack -before %w}}
     }
   }
@@ -1498,12 +1497,7 @@ where:
       .win.fra.fra.nbk2.f2 [pave_Nbk2_Tab2] \
       .win.fra.fra.nbk2.f3 [pave_Nbk2_Tab3]
     # text widget's name is uppercased, so we can use the Text method
-    set wtex [pave Text]
-    # bindings and contents for text widget
-    bind $wtex <<Modified>> ::t::tabModified
-    bind $wtex <Control-f> ::t::findTclFirst
-    bind $wtex <F3> ::t::findTclNext
-    pave displayText $wtex $::t::filetxt
+    pave displayText [pave Text] $::t::filetxt
     # at first, Ftx1 widget is editable
     pave makePopup [pave Ftx1] no yes
     # we can use the Lframe method to get its name, similar to Text
@@ -1681,4 +1675,6 @@ exit
 
 # ________________________ EOF _________________________ #
 
-#ARGS: lightbrown 4 9 12 'large icons'
+#EXEC: tclsh %f lightbrown 4 11 12 'large icons'
+#RUNF: %f lightbrown 4 11 12 'large icons'
+#EXEC: xfce4-terminal --show-toolbar --hide-menubar -x tclsh %f lightbrown 4 11 12 'large icons'
