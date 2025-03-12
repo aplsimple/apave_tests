@@ -201,7 +201,8 @@ namespace eval t {
   # imitating the toolbar functions
   proc toolBut {num {cs -2} {starting no} {hl yes}} {
     if {$num in {3 4}} {
-      #[pave Menu] entryconfigure 2 -font {-slant roman -size 10}
+      .win.menu entryconfigure 2 -font {-slant roman -size 12}
+      after idle ".win.menu.file entryconfigure 2 -font {-family Times -weight bold}"
     } elseif {$num == 2} {
       [pave Pro] stop
       [pave BuT_IMG_2] configure -state disabled
@@ -313,7 +314,7 @@ namespace eval t {
   # ask about exiting
   proc exitProc {resExit} {
     upvar $resExit res
-    if {[::t::pdlg yesno ques "EXIT" "\nClose the test?\n" NO]==1} {
+    if {[::t::pdlg yesno ques "EXIT" "\nClose the test?\n" YES]==1} {
       set res 0
       ::apave::endWM
     }
@@ -1050,7 +1051,7 @@ namespace eval t {
       {diR1 labBdir1 L 1 9 {} {-tvar ::t::dir1 -title {Pick a directory}
       -values {saved/dir/path1 "C:\\Users\\I Me My\\my saved path"}}}
       {fon1 labBfon1 L 1 9 {} {-tvar ::t::fon1 -title {Pick a font}}}
-      {Dat1 labBdat1 L 1 9 {} {-tvar ::t::dat1 -title {Pick a date} -dateformat %Y.%m.%d}}
+      {dat1 labBdat1 L 1 9 {} {-tvar ::t::dat1 -title {Pick a date} -dateformat %Y.%m.%d}}
       {clr1 labBclr1 L 1 9 {} {-tvar ::t::clr1 -title {Pick a color}}}
       {Ftx1 labBftx1 L 1 9 {} {-h 7 -ro 0 -tvar ::t::ftx1 -title {Pick a file to view} -filetypes {{{Tcl scripts} .tcl} {{Text files} {.txt .test}}} -wrap word -tip "After choosing a file\nthe text will be read-only." -tabnext "[::t::pave Opc1]"}}
       {labOpc labBftx1 T 2 1 {-st ens} {-t "tk_optionCascade:"}}
@@ -1186,7 +1187,7 @@ namespace eval t {
       {.frAsc.scA - - - - {pack -side right} {-orient horizontal -w 12 -sliderlength 20 -length 238 -var ::t::sc}}
       {.frALB .frAsc T 1 1}
       {.frALB.laB - - - - {pack -side left -anchor nw} {-t "listbox of colors  "}}
-      {.frALB.lbx - - - - {pack -side left -fill x -expand 1} {-lvar ::t::lvar -h 4 -w 30 -lbxsel dark -ALL yes}}
+      {.frALB.lbx - - - - {pack -side left -fill x -expand 1} {-lvar ::t::lvar -h 4 -w 30 -lbxsel dark -ALL yes -afteridle {%w config -font Times}}}
       {.frALB.sbV + L - - {pack}}
       {.lfR .frALB T 1 1 {-st w} {-t "labeled frame" -font "-weight bold -size 11"}}
       {.lfR.raD1 - - 1 1 {-st w -pady 5} {-t "read-only text" -var ::t::v2 -value 1
@@ -1354,29 +1355,6 @@ where:
     }
   }
 
-  proc yearCurr {} {
-    set wy [pave BttKlndYear]
-    set year [$wy cget -text]
-    set to [expr {[lindex [::klnd::currentYearMonthDay] 0] - $year}]
-    yearNext $to
-  }
-
-  proc yearNext {to} {
-    set wy [pave BttKlndYear]
-    set year [$wy cget -text]
-    incr year $to
-    set yearmin [::klnd::minYear]
-    set yearmax [::klnd::maxYear]
-    if {$year<$yearmin} {set year $yearmin}
-    if {$year>$yearmax} {set year $yearmax}
-    $wy configure -text $year
-    foreach month {1 2 3 4 5 6 7 8 9 10 11 12} {
-      ::klnd::update $month $year $month
-    }
-    .win.fra.fra.nbk2 tab .win.fra.fra.nbk2.f3 -text "< Calendar $year >"
-    update
-  }
-
   proc pave_Nbk2_Tab3 {} {
     return {
       {fra - - - - {-st nsew -cw 1 -rw 1}}
@@ -1413,6 +1391,29 @@ where:
         }
       }}
     }
+  }
+
+  proc yearCurr {} {
+    set wy [pave BttKlndYear]
+    set year [$wy cget -text]
+    set to [expr {[lindex [::klnd::currentYearMonthDay] 0] - $year}]
+    yearNext $to
+  }
+
+  proc yearNext {to} {
+    set wy [pave BttKlndYear]
+    set year [$wy cget -text]
+    incr year $to
+    set yearmin [::klnd::minYear]
+    set yearmax [::klnd::maxYear]
+    if {$year<$yearmin} {set year $yearmin}
+    if {$year>$yearmax} {set year $yearmax}
+    $wy configure -text $year
+    foreach month {1 2 3 4 5 6 7 8 9 10 11 12} {
+      ::klnd::update $month $year $month
+    }
+    .win.fra.fra.nbk2 tab .win.fra.fra.nbk2.f3 -text "< Calendar $year >"
+    update
   }
 
   proc putKlndVar {date tvar} {
@@ -1561,7 +1562,12 @@ where:
     ::apave::obj progress_End
     set ::t::curTab ""
     chanTab nbk
+    if {$::t::geom eq {}} {
+      lassign [split [wm geometry .win] x+] w h
+      set ::t::geom ${w}x$h+200+100
+    }
     set res [pave showModal .win -decor 1 -onclose t::exitProc -focus [pave Text] -geometry $::t::geom]
+    set ::t::geom [wm geometry .win]
     if {$::t::newCS==[apave::cs_Non]} { ;# at restart, newCS is set
       # getting result and clearance
       set res [pave res .win]
@@ -1569,10 +1575,8 @@ where:
       ::t::putsResult2
       ::t::putsResult3
     }
-    puts "Test's geometry: [wm geometry .win]"
+    puts "Test's geometry: $::t::geom"
     destroy .win
-#    pave destroy
-#    pdlg destroy
     return $res
   }
 
@@ -1668,13 +1672,13 @@ if {[info commands playtkl::end] ne {}} playtkl::end  ;# for playtkl recording
 ## ________________________ Restart? _________________________ ##
 
 if {$::t::newCS!=[::apave::cs_Non] || $test2res==100} {  ;# at restart, newCS is set
-  exec [info nameofexecutable] $test2script $t::opct [::t::csCurrent] $t::fontsz $t::ans4 "$::t::opcIcon" $t::hue &
+  exec [info nameofexecutable] $test2script $t::opct [::t::csCurrent] $t::fontsz $t::ans4 "$::t::opcIcon" $t::hue $t::geom &
 }
 ::apave::endWM
 exit
 
 # ________________________ EOF _________________________ #
-
+#RUNF: /home/apl/PG/github/apave_tests/tests/test2_pave.tcl lightbrown 4 9 12 small icons
 #EXEC: tclsh %f lightbrown 4 11 12 'large icons'
 #RUNF: %f lightbrown 4 11 12 'large icons'
 #EXEC: xfce4-terminal --show-toolbar --hide-menubar -x tclsh %f lightbrown 4 11 12 'large icons'
