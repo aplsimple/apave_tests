@@ -39,6 +39,7 @@ $pobj paveWindow $win.fra {
     img_undo {{::Foo undo} -tip "Undo\nF6@@-under 2"}
   }}}
   {fraLeft fraTop T 1 1 {-st ns}}
+  {.sev - - - - {pack -side left -fill y}}
   {.too - - - - {pack -side left -anchor n} {-orient vert -array {
     v_ 10 {########## v_ : just to test #########} {}
     img_yes {{::Foo yes} -tip "Yes\nF1@@-under 2"}
@@ -50,7 +51,7 @@ $pobj paveWindow $win.fra {
     seh 8 {########## another separator #########} {}
     img_undo {{::Foo undo} -tip "Undo\nF6@@-under 2"}
   }}}
-  {.sev - - - - {pack -side left -fill y}}
+  {.sev2 - - - - {pack -side left -fill y}}
   {fraCenter fraLeft L 1 1 {-st nswe -cw 1 -rw 1}}
   {.tex - - - - {pack -side left -expand 1 -fill both} {-h 4 -w 4 -wrap none}}
   {.sbv .tex L - - {pack -after %w}}

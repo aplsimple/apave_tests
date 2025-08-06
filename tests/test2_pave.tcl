@@ -126,6 +126,7 @@ namespace eval t {
         \u2022 <linkRD>rdbende</linkRD>\n \
         \u2022 <linkNB>Nicolas Bats</linkNB>\n \
         \u2022 Alexis Martin\n \
+        \u2022 <linkGY>George Yashin</linkGY>\n \
         \n Special thanks also to\n\n \
         \u2022 <linkPO>Paul Obermeier</linkPO>\n \
         \u2022 <linkHE>Holger Ewert</linkHE>\n \
@@ -283,6 +284,7 @@ namespace eval t {
       [list "linkDB" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/dbohdan"] \
       [list "linkDG" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/Detlef+Groth"] \
       [list "linkPY" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/Poor+Yorick"] \
+      [list "linkGY" "::apave::openDoc %t@@https://github.com/georgtree"] \
       [list "linkMH" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/Matthias+Hoffmann"] \
       [list "linkAK" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/Andreas+Kupries@@"] \
       [list "linkAG" "::apave::openDoc %t@@https://wiki.tcl-lang.org/page/Andy+Goth@@"] \
@@ -956,7 +958,8 @@ namespace eval t {
    \n      \
       lv1 ALL: $::t::lv1 \n      \
    \n      \
-      tblWid1 curselection: [lindex $::t::tbllist 0] \n      \
+      LbxColors curselection: [[pave LbxColors] curselection] \n      \
+      TblWid1 curselection: [[pave TblWid1] curselection] \n      \
       tblWid1 curitem     : [lindex $::t::tbllist 1] \n      \
       tblWid1 items       : [lindex $::t::tbllist 2] \n      \
     "
@@ -1071,9 +1074,9 @@ namespace eval t {
         -command {puts "2nd way ::t::opcvar = [set ::t::opcvar]"} }}
       {labtbl1 labOpc T 1 1 {-st e} {-t "Tablelist widget:\n\ncontains apave's\nwidget types"}}
       {frAT + L 1 9 {-st ew}}
-      {frAT.labTblWid1 - - - - {pack -side left} {-t {if your "tablelist"\nwidget passes\nthe adaptation\nto Tcl/Tk 9.0,\n\nuncomment Tbl\nitems to enable it} -font TkHeadingFont}}
-      {#frAT.TblWid1 - - - - {pack -side left -fill x -expand 1} {-h 5 -lvar ::t::tbllist  -lbxsel buT -columns {$::t::tblcols} -ALL yes}}
-      {#frAT.sbv frAT.tblWid1 L - - {pack}}
+      {#frAT.labTblWid1 - - - - {pack -side left} {-t {if your "tablelist"\nwidget passes\nthe adaptation\nto Tcl/Tk 9.0,\n\nuncomment Tbl\nitems to enable it} -font TkHeadingFont}}
+      {frAT.TblWid1 - - - - {pack -side left -fill x -expand 1} {-h 5 -lvar ::t::tbllist  -lbxsel buT -columns {$::t::tblcols} -ALL yes -selectmode multiple}}
+      {frAT.sbv frAT.tblWid1 L - - {pack}}
       {labB4 labtbl1 T 3 9 {-st ewns -rw 1} {-t "Some others options can be below"}}
     }
   }
@@ -1187,7 +1190,7 @@ namespace eval t {
       {.frAsc.scA - - - - {pack -side right} {-orient horizontal -w 12 -sliderlength 20 -length 238 -var ::t::sc}}
       {.frALB .frAsc T 1 1}
       {.frALB.laB - - - - {pack -side left -anchor nw} {-t "listbox of colors  "}}
-      {.frALB.lbx - - - - {pack -side left -fill x -expand 1} {-lvar ::t::lvar -h 4 -w 30 -lbxsel dark -ALL yes -afteridle {%w config -font Times}}}
+      {.frALB.LbxColors - - - - {pack -side left -fill x -expand 1} {-lvar ::t::lvar -h 4 -w 30 -lbxsel dark -ALL yes -selectmode multiple -afteridle {%w config -font Times}}}
       {.frALB.sbV + L - - {pack}}
       {.lfR .frALB T 1 1 {-st w} {-t "labeled frame" -font "-weight bold -size 11"}}
       {.lfR.raD1 - - 1 1 {-st w -pady 5} {-t "read-only text" -var ::t::v2 -value 1
@@ -1428,7 +1431,15 @@ where:
 
     variable pdlg
     variable pave
-    ::apave::obj progress_Begin {} .win Starting {Wait a little...} {} 1060 -length 250
+    set ws .splash
+    toplevel $ws
+    pack [label $ws.lab1 -text "This is the demo\nsplash screen." -font {-size 40}] \
+      -padx 200 -pady 200
+    pack [label $ws.lab2 -text "Entry just to test the modal mode:"]
+    pack [entry $ws.ent] -expand 1 -fill x
+    ::tk::PlaceWindow $ws
+    ::apave::obj progress_Begin {} $ws Starting {Wait a little...} {} 1060 -length 250 \
+      -modal 1
     set firstin [expr {$::t::newCS==[apave::cs_Non]}]
     apave::APave create pdlg .win
     set ::t::paveobj [apave::APave create pave .win $::t::newCS]
@@ -1560,6 +1571,7 @@ where:
 
     # Open the window at last
     ::apave::obj progress_End
+    after idle {destroy .splash}
     set ::t::curTab ""
     chanTab nbk
     if {$::t::geom eq {}} {
