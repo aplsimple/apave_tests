@@ -966,6 +966,29 @@ namespace eval t {
     puts "Days selected: [klnd::getDaylist $::t::paveobj]"
   }
 
+  proc ChangeTips {} {
+    ::baltip tip [$::t::paveobj SpxMisc] "New tip #[incr ::t::SpxMisc_tipcnt]."
+    ::baltip::tip .win.fra.fra.nbk "Nbk tab tip $::t::SpxMisc_tipcnt" -nbktab .win.fra.fra.nbk.f4
+  }
+
+  proc ChangeTab5Tip {args} {
+    lassign $args nbkpath tabpath tabname
+    switch $tabname {
+      f5 {
+        # handle only 5th tab's tip
+        set tip "Color schemes\
+          \n  NOTE: at each exposition - new tip for this tab\
+          \n  which may depend on the app's current state:\
+          \n  $tabname: TIP #[incr ::t::Tab5_tipcnt]"
+      }
+      default {
+        # others remain unchanged
+        set tip [::baltip cget $tabpath -text]
+      }
+    }
+    return $tip
+  }
+
 # __________________________ Paving procedures __________________________ #
 
   proc pave_Main_Frame {} {
@@ -995,7 +1018,7 @@ namespace eval t {
         f2 {-t " Ttk demos/ttkpane.tcl " -underline 1 -tip "The code taken from\nTk's demos/ctext.tcl.\n\nDistributed with Tcl/Tk."}
         f3 {-t " Non-themed " -underline 1 -tip "Non-ttk widgets,\nthough themed in apave."}
         f4 {-t " Misc. widgets " -underline 1 -tip "Miscellaneous ttk widgets."}
-        f5 {-t " Color schemes " -underline 1 -tip "Colored patterns\nof color schemes."}
+        f5 {-t "Color schemes" -underline 1 -tip {-BALTIP f5 -COMMAND "::t::ChangeTab5Tip %w %a"}}
         -traverse yes -select f2
       }}
       {fra.nbk2 - - - - {pack forget -side top} {
@@ -1184,7 +1207,7 @@ namespace eval t {
       {.frA.laB - - 1 1 {-st w -ipady 5} {-t "label in frame" -font "-weight bold -size 11"}}
       {.frAS .frA T 1 1 {-st w -pady 5}}
       {.frAS.laB - - - - {pack -side left -anchor w} {-t "spinbox 1 through 9 "}}
-      {.frAS.spX - - - - {pack} {-tvar ::t::tv -from 1 -to 9 -w 5 -justify center}}
+      {.frAS.spX - - - - {pack} {-tvar ::t::tv -from 1 -to 9 -w 5 -justify center -tip "Tip with ranges"}}
       {.frAsc .frAS T 1 1 {-st ew -pady 5}}
       {.frAsc.laBsc - - - - {pack -side left} {-t "scale 0 through 100 "}}
       {.frAsc.scA - - - - {pack -side right} {-orient horizontal -w 12 -sliderlength 20 -length 238 -var ::t::sc}}
@@ -1245,7 +1268,8 @@ namespace eval t {
       {lab - - - - {pack} {-tvar ::t::sc2}}
       {sca - - - - {pack} {-length 500 -o horiz -var ::t::sc -from 0 -to 100}}
       {seh2 - - - - {pack -pady 7 -fill x}}
-      {SpxMisc - - - - {pack} {-tvar ::t::tv -from 1 -to 9 -w 5 -justify center}}
+      {SpxMisc - - - - {pack} {-tvar ::t::tv -from 1 -to 9 -w 5 -justify center -tooltip "Tooltip with no ranges"}}
+      {butSpx - - - - {pack} {-t "Change tips (spinbox & notebook tab)" -command ::t::ChangeTips}}
       {seh3 - - - - {pack -pady 7 -fill x}}
       {lab1 - - - - {pack} {-t "Combobox is sort of separate widget."}}
       {v_1 - - - - {pack} {-h 3}}
@@ -1508,6 +1532,7 @@ where:
       .win.fra.fra.nbk2.f1 [pave_Nbk2_Tab1] \
       .win.fra.fra.nbk2.f2 [pave_Nbk2_Tab2] \
       .win.fra.fra.nbk2.f3 [pave_Nbk2_Tab3]
+::baltip::tip .win.fra.fra.nbk.f5 {Nbk tab tip!!!!} -nbktab .win.fra.fra.nbk.f5
     # text widget's name is uppercased, so we can use the Text method
     pave displayText [pave Text] $::t::filetxt
     # at first, Ftx1 widget is editable
