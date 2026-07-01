@@ -1423,7 +1423,7 @@ where:
   proc yearCurr {} {
     set wy [pave BttKlndYear]
     set year [$wy cget -text]
-    set to [expr {[lindex [::klnd::currentYearMonthDay] 0] - $year}]
+    set to [expr {[lindex [::apave::currentYearMonthDay] 0] - $year}]
     yearNext $to
   }
 
@@ -1431,8 +1431,8 @@ where:
     set wy [pave BttKlndYear]
     set year [$wy cget -text]
     incr year $to
-    set yearmin [::klnd::minYear]
-    set yearmax [::klnd::maxYear]
+    set yearmin [::apave::minYear]
+    set yearmax [::apave::maxYear]
     if {$year<$yearmin} {set year $yearmin}
     if {$year>$yearmax} {set year $yearmax}
     $wy configure -text $year
@@ -1517,7 +1517,7 @@ where:
     ::apave::ttkToolbutton
     ::apave::defaultAttrs chB {} {-padx 11 -pady 3}  ;# to test defaultAttrs
     source [file join $::pavedirname pickers klnd klnd.tcl]
-    lassign [::klnd::currentYearMonthDay] ::t::year ::t::month
+    lassign [::apave::currentYearMonthDay] ::t::year ::t::month
     set ::t::restart 1
 
     # making main window object and dialog object
