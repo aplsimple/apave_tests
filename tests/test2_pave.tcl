@@ -1308,9 +1308,11 @@ where:
         set prt BuTClrN
         for {set i 0} {$i<48} {incr i} {
           set cur "BuTClr$i"
+          set csn [::t::pave csGetName $i]
           if {$i%4} {set n +; set p L} {set n $prt; set p T; set prt $cur}
           set lwid "$cur $n $p 1 1 {-st nsew -rw 1 -cw 1} {-com \
-           {::t::toolBut 4 $i} -t \"CS [::t::pave csGetName $i]\"}"
+           {::t::toolBut 4 $i} -t {CS $csn} -tip \
+           {Click to switch to\n\"$csn\" color scheme}}"
           %C $lwid
         }
       }}
@@ -1532,7 +1534,6 @@ where:
       .win.fra.fra.nbk2.f1 [pave_Nbk2_Tab1] \
       .win.fra.fra.nbk2.f2 [pave_Nbk2_Tab2] \
       .win.fra.fra.nbk2.f3 [pave_Nbk2_Tab3]
-::baltip::tip .win.fra.fra.nbk.f5 {Nbk tab tip!!!!} -nbktab .win.fra.fra.nbk.f5
     # text widget's name is uppercased, so we can use the Text method
     pave displayText [pave Text] $::t::filetxt
     # at first, Ftx1 widget is editable
@@ -1601,7 +1602,7 @@ where:
     chanTab nbk
     if {$::t::geom eq {}} {
       lassign [split [wm geometry .win] x+] w h
-      set ::t::geom ${w}x$h+200+100
+      set ::t::geom ${w}x[incr h 50]+200+50
     }
     set res [pave showModal .win -decor 1 -onclose t::exitProc -focus [pave Text] -geometry $::t::geom]
     set ::t::geom [wm geometry .win]
